@@ -188,7 +188,11 @@ define([
 
 
         idj++;
-        var gridOption = $.extend(true, {}, sigmagridConfig, {
+
+        // extend sigmagridConfig with any specific config passed in
+        var defaultRenderOptions = $.extend(true, {}, sigmagridConfig, obj.config);
+
+        var gridOption = $.extend(true, {}, defaultRenderOptions, {
             id: this.id + "_" + this.id + idj,
             dataset: dsOption,
             //   customHead : 'myHead1',

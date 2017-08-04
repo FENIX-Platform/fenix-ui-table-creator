@@ -1,0 +1,9 @@
+<table id="{{ idElem }}">
+    <thead>
+    <tr>
+        {{#each colElem}}
+        <th data-sortable="true" data-field="{{ this.id }}"> {{ this.title }}</th>
+        {{/each}}
+    </tr>
+    </thead>
+</table>

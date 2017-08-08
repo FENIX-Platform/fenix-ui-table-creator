@@ -166,7 +166,6 @@ define([
     BootstrapTable.prototype._parseData = function (model) {
         var data = [];
         var structure = {};
-        var self = this;
 
         // Here we should do some finer purge, but since the btable ignores
         // when data is not conform to the structure, I guess we're fine.
@@ -178,23 +177,18 @@ define([
 
         $.each(model.data, function(id2, ob2){
             var toPush = $.extend({}, structure);
-            $.each(structure, function(id3, ob3){
-                if (id3.substr(0,5) === "VALUE") {
-                    // If is a value, put with localeString()
-                    toPush[id3] = ob2[ob3]; // self._numberWithCommas(ob2[ob3]); //.toLocaleString();
-                } else {
-                    toPush[id3] = ob2[ob3];
-                }
+            $.each(structure, function(id3, ob3) {
+                toPush[id3] = ob2[ob3];
             });
             data.push(toPush);
         });
 
         return data;
-    }
+    };
 
     BootstrapTable.prototype._numberWithCommas = function(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+    };
 
     //disposition
     BootstrapTable.prototype._unbindEventListeners = function () {

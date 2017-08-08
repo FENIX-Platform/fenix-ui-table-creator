@@ -13,8 +13,8 @@ define([
 
     var selectorPath = "./renderers/";
 
-    function Olap(o) {
-        log.info("FENIX Olap");
+    function TableCreator(o) {
+        log.info("FENIX Table Creator");
         log.info(o);
 
         //Import css
@@ -29,7 +29,7 @@ define([
         if (valid === true) {
             this._initVariables();
             this._bindEventListeners();
-            this._renderOlap();
+            this._renderTableCreator();
             return this;
         } else {
             log.error("Impossible to create Olap");
@@ -38,7 +38,7 @@ define([
     }
 
     // API
-    Olap.prototype.update = function (config) {
+    TableCreator.prototype.update = function (config) {
         this.olap.model = this.pivotator.pivot(this.model, config);
         this.olap.update(config);
     };
@@ -47,7 +47,7 @@ define([
      * pub/sub
      * @return {Object} component instance
      */
-    Olap.prototype.on = function (channel, fn, context) {
+    TableCreator.prototype.on = function (channel, fn, context) {
         var _context = context || this;
         if (!this.channels[channel]) {
             this.channels[channel] = [];
@@ -56,7 +56,7 @@ define([
         return this;
     };
 
-    Olap.prototype._trigger = function (channel) {
+    TableCreator.prototype._trigger = function (channel) {
         if (!this.channels[channel]) {
             return false;
         }
@@ -70,7 +70,7 @@ define([
 
     // end API
 
-    Olap.prototype._parseInput = function () {
+    TableCreator.prototype._parseInput = function () {
         this.id = this.initial.id;
         this.$el = $(this.initial.el);
         this.model = this.initial.model;
@@ -108,7 +108,7 @@ define([
         this.lang = this.lang.toLowerCase();
     };
 
-    Olap.prototype._validateInput = function () {
+    TableCreator.prototype._validateInput = function () {
         var valid = true,
             errors = [];
 
@@ -134,11 +134,11 @@ define([
         return errors.length > 0 ? errors : valid;
     };
 
-    Olap.prototype._bindEventListeners = function () {
+    TableCreator.prototype._bindEventListeners = function () {
 
     };
 
-    Olap.prototype._initVariables = function () {
+    TableCreator.prototype._initVariables = function () {
 
         //pub/sub
         this.channels = {};
@@ -149,9 +149,10 @@ define([
 
     // Preload scripts
 
-    Olap.prototype._getPluginPath = function (name) {
+    TableCreator.prototype._getPluginPath = function (name) {
 
         var registeredSelectors = $.extend(true, {}, this.pluginRegistry), path;
+
         var conf = registeredSelectors[name];
         if (!conf) {
             log.error('Registration not found for "' + name + ' plugin".');
@@ -166,11 +167,18 @@ define([
         return selectorPath + path;
     };
 
-    Olap.prototype._renderOlap = function () {
+    TableCreator.prototype._getModelValues = function (model, config) {
+        var ret = model;
+        if (this.type === 'olap' ) ret = this.pivotator.pivot(this.model, config);
+
+        return ret;
+    }
+
+    TableCreator.prototype._renderTableCreator = function () {
         var Renderer = this._getRenderer(this.type);
         var myPivotatorConfig = $.extend(true, {lang : this.lang.toUpperCase()}, this.initial, this.fenixTool.parseInput(this.model.metadata.dsd, this.pivotatorConfig));
 
-        var model = this.pivotator.pivot(this.model, myPivotatorConfig);
+        var model = this._getModelValues(this.model, myPivotatorConfig);
 
         var config = $.extend(true, {}, {
             pivotatorConfig: myPivotatorConfig,
@@ -184,26 +192,26 @@ define([
         this._trigger("ready");
     };
 
-    Olap.prototype._getEventName = function (evt) {
+    TableCreator.prototype._getEventName = function (evt) {
         return this.id.concat(evt);
     };
 
-    Olap.prototype._getRenderer = function (name) {
+    TableCreator.prototype._getRenderer = function (name) {
         return require(this._getPluginPath(name) + ".js");
     };
 
     //disposition
-    Olap.prototype._unbindEventListeners = function () {
+    TableCreator.prototype._unbindEventListeners = function () {
 
     };
 
-    Olap.prototype.dispose = function () {
+    TableCreator.prototype.dispose = function () {
 
         this.olap.dispose();
         this._unbindEventListeners();
     };
 
-    Olap.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
+    TableCreator.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
         var Instance = this.olap;
         if ($.isFunction(Instance[method])) {
             return Instance[method](opts1, opts2);
@@ -213,5 +221,5 @@ define([
         }
     };
 
-    return Olap;
+    return TableCreator;
 });

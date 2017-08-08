@@ -42,8 +42,9 @@ define([
 
     Dev.prototype.start = function () {
         log.trace("Test started");
-        //this._testFilterInteraction();
-        this._bootstrapTable();
+        this._testFilterInteraction();
+        //this._testBoostrapTable();
+        //this._bootstrapTable();
     };
 
     Dev.prototype._testFilterInteraction = function () {
@@ -197,6 +198,25 @@ define([
 
     };
 
+    Dev.prototype._testBoostrapTable = function () {
+        var config = $.extend(true, {}, {
+                model: i18nModel,
+                el: "#olap-interaction",
+                lang : "EN",
+                type : "bootstrap-table"
+            }, config
+        );
+
+        log.trace("Init Olap");
+        log.trace(JSON.stringify(config));
+
+        for (var d in config.derived) {
+            config.aggregations.push(d);
+        }
+
+        this.olap = new OlapCreator(config);
+
+    };
     // Utils
 
     Dev.prototype._importThirdPartyCss = function () {

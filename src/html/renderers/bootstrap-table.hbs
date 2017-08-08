@@ -2,8 +2,18 @@
     <thead>
     <tr>
         {{#each colElem}}
-        <th data-sortable="true" data-field="{{ this.id }}"> {{ this.title }}</th>
+        <th data-sortable="true"
+            data-field="{{ this.id }}"
+            {{#if this.isNumber}}
+            data-formatter="numberFormatter"
+            {{/if}}
+        > {{ this.title }}</th>
         {{/each}}
     </tr>
     </thead>
+    <script>
+        function numberFormatter(value) {
+            return value.toLocaleString()
+        }
+    </script>
 </table>

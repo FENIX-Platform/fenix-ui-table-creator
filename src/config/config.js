@@ -11,6 +11,9 @@ define(function () {
         pluginRegistry: {
             'olap': {
                 path: 'sigmagrid'
+            },
+            'bootstrap-table' : {
+                path: 'bootstrap-table'
             }
         }
     }

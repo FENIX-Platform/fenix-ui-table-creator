@@ -5,12 +5,13 @@ define([
     '../../config/errors',
     '../../config/events',
     '../../config/config',
+    '../../config/renderers/bootstrap-table',
     'bootstrap-table',
     '../../../src/html/renderers/bootstrap-table.hbs',
     '../../../node_modules/bootstrap-table/dist/bootstrap-table-locale-all.min',
     '../../../node_modules/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.min'
 
-], function ($, _, log, ERR, EVT, C, bootstrapTable, bTableTemplate) {
+], function ($, _, log, ERR, EVT, C, boostrapTableConfig, bootstrapTable, bTableTemplate) {
 
     'use strict';
     var idj = 0;
@@ -30,7 +31,7 @@ define([
 
             this._bindEventListeners();
 
-            this._renderBoostrapTable();
+            this._renderBoostrapTable(this.config);
 
             return this;
 
@@ -94,14 +95,12 @@ define([
 
         this.$el = $(this.el);
 
-        this.config = {
-            data: null,
-            locale : this.lang.toLowerCase()+"-"+this.lang.toUpperCase(),
-            pagination: true,
-            search: true,
-            height: 543,
-            showMultiSort: true
-        }
+        console.log(boostrapTableConfig);
+
+        this.config = $.extend(true, {}, boostrapTableConfig, this.pivotatorConfig.config);
+
+
+        console.log(this.config)
 
     };
 
@@ -111,14 +110,14 @@ define([
 
     };
 
-    BootstrapTable.prototype._renderBoostrapTable = function () {
+    BootstrapTable.prototype._renderBoostrapTable = function (config) {
 
         var tab = this._createHTML(this.el, this.model);
         this.data = this._parseData(this.model);
 
-        this.config.data = this.data;
+        if (!config.data) config.data = this.data;
 
-        $(tab).bootstrapTable(this.config);
+        $(tab).bootstrapTable(config);
 
     };
 
@@ -186,6 +185,7 @@ define([
         return data;
     };
 
+    // Utils
     BootstrapTable.prototype._numberWithCommas = function(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };

@@ -21,7 +21,7 @@ define([
         log.info("FENIX BootstrapTable");
         log.info(o);
 
-        $.extend(true, this, C, o);
+        $.extend(true, this, {initial: o}, C);
 
         var valid = this._validateInput();
 
@@ -91,18 +91,16 @@ define([
         //pub/sub
         this.channels = {};
 
-        this.lang = this.lang.toUpperCase();
+        this.lang = this.initial.lang.toUpperCase();
+        this.el = this.initial.el;
+        this.$el = $(this.initial.el);
 
-        this.$el = $(this.el);
+        this.model = this.initial.model;
 
-        console.log(boostrapTableConfig);
-
-        this.config = $.extend(true, {}, boostrapTableConfig, this.pivotatorConfig.config);
-
-
-        console.log(this.config)
+        this.config = $.extend(true, {}, boostrapTableConfig, this.initial.pivotatorConfig);
 
     };
+
 
     BootstrapTable.prototype._bindEventListeners = function () {
 
@@ -112,12 +110,21 @@ define([
 
     BootstrapTable.prototype._renderBoostrapTable = function (config) {
 
+        log.info('Rendering bootstrap table', config)
+        log.info('Parsing model', this.model)
+
         var tab = this._createHTML(this.el, this.model);
         this.data = this._parseData(this.model);
 
-        if (!config.data) config.data = this.data;
+        log.info('Retreving data', this.data);
 
-        $(tab).bootstrapTable(config);
+        if (!config.data) {
+            config.data = this.data;
+        }
+
+        $(tab).bootstrapTable({
+            data: this.data
+        });
 
     };
 
@@ -199,6 +206,7 @@ define([
 
         //unbind event listeners
         this._unbindEventListeners();
+        $(tab).bootstrapTable('destroy');
 
     };
 

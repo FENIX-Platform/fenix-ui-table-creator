@@ -6,9 +6,8 @@
         <tr>
 
             {{#each rowname}}
-                <td rowspan='{{ rowSpan }}' columnId="{{ this.id }}" resizable='false'
-                onmouseover="console.log({{this}})"
-                >
+                <td rowspan='{{ rowSpan }}' columnId="{{ this.id }}" resizable='false'>
+                <!--onmouseover="console.log({{this}})"-->
 
                     {{ i18n this.title }}</td>
             {{/each}}

@@ -10,11 +10,8 @@ define([
     'dev/src/models/all',
     'dev/src/models/filter-interaction',
     'dev/src/models/i18n',
-    'bootstrap-table',
-    '../../../src/html/renderers/bootstrap-table.hbs',
-    '../../../node_modules/bootstrap-table/dist/bootstrap-table-locale-all.min',
-    '../../../node_modules/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.min'
-], function (log, $, _, OlapCreator, Filter, FenixTool, Model, AllModel, FilterModel, i18nModel, bootstrapTable, bTableTemplate) {
+    'dev/src/models/adam'
+], function (log, $, _, OlapCreator, Filter, FenixTool, Model, AllModel, FilterModel, i18nModel, AdamModel) {
 
     'use strict';
 
@@ -119,7 +116,7 @@ define([
 
     Dev.prototype._testBoostrapTable = function () {
         var config = $.extend(true, {}, {
-                model: i18nModel,
+                model: AdamModel,
                 el: "#olap-interaction",
                 lang : "EN",
                 type : "bootstrap-table"

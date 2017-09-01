@@ -97,7 +97,7 @@ define([
 
         this.model = this.initial.model;
 
-        this.config = $.extend(true, {}, boostrapTableConfig, this.initial.pivotatorConfig);
+        this.config = $.extend(true, {}, boostrapTableConfig, this.initial.pivotatorConfig.config);
 
     };
 
@@ -113,18 +113,22 @@ define([
         log.info('Rendering bootstrap table', config)
         log.info('Parsing model', this.model)
 
-        var tab = this._createHTML(this.el, this.model);
         this.data = this._parseData(this.model);
 
         log.info('Retreving data', this.data);
 
-        if (!config.data) {
-            config.data = this.data;
-        }
+        if (this.data.length > 0) {
 
-        $(tab).bootstrapTable({
-            data: this.data
-        });
+            var tab = this._createHTML(this.el, this.model);
+
+            if (!config.data) {
+                config.data = this.data;
+            }
+
+            $(tab).bootstrapTable(config);
+        } else {
+            log.warn('No Data');
+        }
 
     };
 
@@ -203,10 +207,9 @@ define([
     };
 
     BootstrapTable.prototype.dispose = function () {
-
         //unbind event listeners
         this._unbindEventListeners();
-        $(tab).bootstrapTable('destroy');
+        //$(tab).bootstrapTable('destroy');
 
     };
 

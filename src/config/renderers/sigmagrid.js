@@ -7,7 +7,7 @@ define(function () {
         height: "370",
        
         replaceContainer: false,
-        pageSize: 15,
+        pageSize: 50,
         pageSizeList: [15, 25, 50, 150],
         SigmaGridPath: 'grid/',
         toolbarContent: 'nav | goto | pagesize '
